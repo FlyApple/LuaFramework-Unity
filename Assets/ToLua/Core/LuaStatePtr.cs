@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//#define USE_LUAJIT
+
+using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -9,7 +11,7 @@ namespace LuaInterface
     public class LuaStatePtr
     {
         protected IntPtr L;
-
+#if USE_LUAJIT
         string jit = @"            
         function Euler(x, y, z)
             x = x * 0.0087266462599716
@@ -67,6 +69,7 @@ namespace LuaInterface
                 end                
             end	                   
         end";
+#endif
 
         public int LuaUpValueIndex(int i)
         {
@@ -78,6 +81,7 @@ namespace LuaInterface
             return LuaDLL.luaL_newstate();            
         }
 
+#if USE_LUAJIT
         public void LuaOpenJit()
         {
 #if UNITY_ANDROID
@@ -94,7 +98,7 @@ namespace LuaInterface
             }
 #endif
         }
-
+#endif
         public void LuaClose()
         {
             LuaDLL.lua_close(L);
@@ -631,7 +635,9 @@ namespace LuaInterface
         public void OpenToLuaLibs()
         {
             LuaDLL.tolua_openlibs(L);
+#if USE_LUAJIT
             LuaOpenJit();
+#endif
         }
 
         public void ToLuaPushTraceback()

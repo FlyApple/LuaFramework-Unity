@@ -207,12 +207,17 @@ namespace LuaInterface
     {
         public static string version = "1.0.7.386";
         public static int LUA_MULTRET = -1;
-        public static string[] LuaTypeName = { "none", "nil", "boolean", "lightuserdata", "number", "string", "table", "function", "userdata", "thread" };        
+        public static string[] LuaTypeName = { "none", "nil", "boolean", "lightuserdata", "number", "string", "table", "function", "userdata", "thread" };
 
 #if !UNITY_EDITOR && UNITY_IPHONE
         const string LUADLL = "__Internal";
+#elif UNITY_EDITOR && PLATFORM_ARCH_32
+        // Unity 5.x.x not support Editor x32 model
+        const string LUADLL = "luaruntime_x32";
+#elif UNITY_EDITOR && PLATFORM_ARCH_64
+        const string LUADLL = "luaruntime_x64";
 #else
-        const string LUADLL = "tolua";
+        const string LUADLL = "luaruntime";
 #endif
         /*
         ** third party library
