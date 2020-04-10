@@ -211,10 +211,10 @@ namespace LuaInterface
 
 #if !UNITY_EDITOR && UNITY_IPHONE
         const string LUADLL = "__Internal";
-#elif UNITY_EDITOR && PLATFORM_ARCH_32
+#elif UNITY_EDITOR && UNITY_EDITOR_32
         // Unity 5.x.x not support Editor x32 model
         const string LUADLL = "luaruntime_x32";
-#elif UNITY_EDITOR && PLATFORM_ARCH_64
+#elif UNITY_EDITOR && UNITY_EDITOR_64
         const string LUADLL = "luaruntime_x64";
 #else
         const string LUADLL = "luaruntime";
