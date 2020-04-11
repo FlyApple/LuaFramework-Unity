@@ -90,7 +90,7 @@ public class AccessingArray : MonoBehaviour
 
     void OnApplicationQuit()
     {
-#if UNITY_5 || UNITY_2017 || UNITY_2018
+#if UNITY_5_4_OR_NEWER
         Application.logMessageReceived -= ShowTips;
 #else
         Application.RegisterLogCallback(null);

@@ -28,17 +28,24 @@ using System.Text;
 
 public class LuaResLoader : LuaFileUtils
 {
+#if UNITY_ANDROID
+    LuaAndroidAssetsLoader loader;
+#endif
+
     public LuaResLoader()
     {
         instance = this;
         beZip = false;
+
+#if UNITY_ANDROID
+        this.loader = new LuaAndroidAssetsLoader();
+#endif
     }
 
     public override byte[] ReadFile(string fileName)
     {
 #if !UNITY_EDITOR
         byte[] buffer = ReadDownLoadFile(fileName);
-
         if (buffer == null)
         {
             buffer = ReadResourceFile(fileName);
@@ -50,7 +57,6 @@ public class LuaResLoader : LuaFileUtils
         }        
 #else
         byte[] buffer = base.ReadFile(fileName);
-
         if (buffer == null)
         {
             buffer = ReadResourceFile(fileName);
@@ -86,9 +92,7 @@ public class LuaResLoader : LuaFileUtils
                 sb.Append("\n\tno file '").Append(searchPaths[i]).Append('\'');
             }
 
-            sb.Append("\n\tno file './Resources/").Append(fileName).Append(".lua'")
-              .Append("\n\tno file '").Append(LuaConst.luaResDir).Append('/')
-			  .Append(fileName).Append(".lua'");
+            sb.Append("\n\tno file './Resources/").Append(fileName).Append(".lua'");
             sb = sb.Replace("?", fileName);
 
             return sb.ToString();
@@ -122,22 +126,29 @@ public class LuaResLoader : LuaFileUtils
             fileName += ".lua";
         }
 
-        string path = fileName;
 
-        if (!Path.IsPathRooted(fileName))
-        {            
-            path = string.Format("{0}/{1}", LuaConst.luaResDir, fileName);            
+#if UNITY_ANDROID && !UNITY_EDITOR
+        string path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
+        byte[] buffer = this.loader.ReadBufferFromFile(path);
+        if (buffer == null) {
+            return buffer;
         }
-
-        if (File.Exists(path))
-        {
-#if !UNITY_WEBPLAYER
-            return File.ReadAllBytes(path);
+        path = string.Format("{0}/{1}", LuaConst.luaDir, fileName);
+        buffer = this.loader.ReadBufferFromFile(path);
+        if (buffer == null) {
+            return buffer;
+        }
 #else
-            throw new LuaException("can't run in web platform, please switch to other platform");
-#endif
+        string path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
+        if (File.Exists(path)) {
+            return File.ReadAllBytes(path);
         }
 
+        path = string.Format("{0}/{1}", LuaConst.luaDir, fileName);
+        if (File.Exists(path)) {
+            return File.ReadAllBytes(path);
+        }
+#endif
         return null;
     }
 }

@@ -162,11 +162,7 @@ namespace LuaInterface
 
                 if (!string.IsNullOrEmpty(path) && File.Exists(path))
                 {
-#if !UNITY_WEBPLAYER
                     str = File.ReadAllBytes(path);
-#else
-                    throw new LuaException("can't run in web platform, please switch to other platform");
-#endif
                 }
 
                 return str;
@@ -245,7 +241,7 @@ namespace LuaInterface
                     fileName += ".lua";
                 }
 
-#if UNITY_5 || UNITY_5_3_OR_NEWER
+#if UNITY_5_3_OR_NEWER
                 fileName += ".bytes";
 #endif
                 zipName = sb.ToString();

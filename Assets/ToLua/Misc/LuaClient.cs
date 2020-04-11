@@ -70,30 +70,10 @@ public class LuaClient : MonoBehaviour
 
         if (LuaConst.openLuaDebugger)
         {
-            OpenZbsDebugger();
+            //OpenZbsDebugger();
         }
     }
 
-    public void OpenZbsDebugger(string ip = "localhost")
-    {
-        if (!Directory.Exists(LuaConst.zbsDir))
-        {
-            Debugger.LogWarning("ZeroBraneStudio not install or LuaConst.zbsDir not right");
-            return;
-        }
-
-        if (!LuaConst.openLuaSocket)
-        {                            
-            OpenLuaSocket();
-        }
-
-        if (!string.IsNullOrEmpty(LuaConst.zbsDir))
-        {
-            luaState.AddSearchPath(LuaConst.zbsDir);
-        }
-
-        luaState.LuaDoString(string.Format("DebugServerIp = '{0}'", ip), "@LuaClient.cs");
-    }
 
     [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
     static int LuaOpen_Socket_Core(IntPtr L)

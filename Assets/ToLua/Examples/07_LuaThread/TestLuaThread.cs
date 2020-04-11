@@ -40,7 +40,7 @@ public class TestLuaThread : MonoBehaviour
 
     void Start () 
     {
-#if UNITY_5 || UNITY_2017 || UNITY_2018
+#if UNITY_5_4_OR_NEWER
         Application.logMessageReceived += ShowTips;
 #else
         Application.RegisterLogCallback(ShowTips);
@@ -73,7 +73,7 @@ public class TestLuaThread : MonoBehaviour
 
         state.Dispose();
         state = null;
-#if UNITY_5 || UNITY_2017 || UNITY_2018
+#if UNITY_5_4_OR_NEWER
         Application.logMessageReceived -= ShowTips;
 #else
         Application.RegisterLogCallback(null);

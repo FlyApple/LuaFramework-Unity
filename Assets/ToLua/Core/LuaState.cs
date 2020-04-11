@@ -182,6 +182,8 @@ namespace LuaInterface
 
             if (!LuaFileUtils.Instance.beZip)
             {
+                Debugger.Log("[LuaState] Path: {0}", LuaConst.toluaDir);
+                Debugger.Log("[LuaState] Path: {0}", LuaConst.luaDir);
 #if UNITY_EDITOR
                 if (!Directory.Exists(LuaConst.luaDir))
                 {
@@ -198,10 +200,8 @@ namespace LuaInterface
                 AddSearchPath(LuaConst.toluaDir);
                 AddSearchPath(LuaConst.luaDir);
 #endif
-                if (LuaFileUtils.Instance.GetType() == typeof(LuaFileUtils))
-                {
-                    AddSearchPath(LuaConst.luaResDir);
-                }
+                Debugger.Log("[LuaState] Path: {0}", LuaConst.luaResDir);
+                AddSearchPath(LuaConst.luaResDir);
             }
         }
 
@@ -216,7 +216,7 @@ namespace LuaInterface
 #if UNITY_EDITOR
             beStart = true;
 #endif
-            Debugger.Log("LuaState start");
+            Debugger.Log("[LuaState] starting ...");
             OpenBaseLuaLibs();
 #if ENABLE_LUA_INJECTION
             Push(LuaDLL.tolua_tag());
@@ -617,7 +617,7 @@ namespace LuaInterface
 
             if (buffer == null)
             {
-                string error = string.Format("cannot open {0}: No such file or directory", fileName);
+                string error = string.Format("cannot open ({0}): No such file or directory", fileName);
                 error += LuaFileUtils.Instance.FindFileError(fileName);
                 throw new LuaException(error);
             }
