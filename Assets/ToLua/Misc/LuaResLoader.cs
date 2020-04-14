@@ -128,20 +128,31 @@ public class LuaResLoader : LuaFileUtils
 
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-        string path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
-        MonoBehaviour.print(path);
+        // 优先读取外部脚本
+        string path = string.Format("{0}/{1}", LuaConst.luaResDir, fileName);
         byte[] buffer = this.loader.ReadBufferFromFile(path);
         if (buffer != null) {
             return buffer;
         }
+
+        path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
+        buffer = this.loader.ReadBufferFromFile(path);
+        if (buffer != null) {
+            return buffer;
+        }
         path = string.Format("{0}/{1}", LuaConst.luaDir, fileName);
-        MonoBehaviour.print(path);
         buffer = this.loader.ReadBufferFromFile(path);
         if (buffer != null) {
             return buffer;
         }
 #else
-        string path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
+        // 优先读取外部脚本
+        string path = string.Format("{0}/{1}", LuaConst.luaResDir, fileName);
+        if (File.Exists(path)) {
+            return File.ReadAllBytes(path);
+        }
+
+        path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
         if (File.Exists(path)) {
             return File.ReadAllBytes(path);
         }

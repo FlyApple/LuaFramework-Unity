@@ -200,8 +200,8 @@ namespace LuaInterface
                 AddSearchPath(LuaConst.toluaDir);
                 AddSearchPath(LuaConst.luaDir);
 #endif
-                Debugger.Log("[LuaState] Path: {0}", LuaConst.luaResDir);
-                AddSearchPath(LuaConst.luaResDir);
+                //Debugger.Log("[LuaState] Path: {0}", LuaConst.luaResDir);
+                //AddSearchPath(LuaConst.luaResDir);
             }
         }
 
