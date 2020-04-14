@@ -119,7 +119,7 @@ public class LuaAssetsLoader
                     byte[] buffer = new byte[length];
                     stream.read(buffer, 0, length);
                     stream.close();
-                    Log.println(Log.WARN, "LXUTIL", "(LuaLoader) buffer length : " + length);
+                    Log.println(Log.WARN, "LXUTIL", "(LuaLoader) read ("+ filename +") length : " + length);
                     return buffer;
                 }
             } else {
@@ -130,6 +130,7 @@ public class LuaAssetsLoader
                     byte[] buffer = new byte[length];
                     stream.read(buffer, 0, length);
                     stream.close();
+                    Log.println(Log.WARN, "LXUTIL", "(LuaLoader) read ("+ filename +") length : " + length);
                     return buffer;
                 }
             }
