@@ -3,6 +3,8 @@ using UnityEngine;
 using LuaInterface;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
+using System.Reflection;
 
 public class LuaAndroidAssetsLoader
 {
@@ -32,19 +34,25 @@ public class LuaAndroidAssetsLoader
 
     public byte[] ReadBufferFromFile(string fileName)
     {
+
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (_moduleObject != null) {
-            return _moduleObject.Call<byte[]>("readBufferFromFile", new object[] { fileName });
+            sbyte[] buffer = _moduleObject.Call<sbyte[]>("readBufferFromFile", new object[] { fileName });
+            if(buffer != null) {
+                byte[] result = new byte[buffer.Length];
+                System.Buffer.BlockCopy(buffer, 0, result, 0, buffer.Length);
+                return result;
+            }
         }
 #endif
         return null;
     }
 
-    public byte[] ReadStringFromFile(string fileName)
+    public string ReadStringFromFile(string fileName)
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (_moduleObject != null) {
-            return _moduleObject.Call<byte[]>("readStringFromFile", new object[] { fileName });
+            return _moduleObject.Call<string>("readStringFromFile", new object[] { fileName });
         }
 #endif
         return null;

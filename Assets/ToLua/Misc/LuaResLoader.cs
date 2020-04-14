@@ -129,13 +129,15 @@ public class LuaResLoader : LuaFileUtils
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         string path = string.Format("{0}/{1}", LuaConst.toluaDir, fileName);
+        MonoBehaviour.print(path);
         byte[] buffer = this.loader.ReadBufferFromFile(path);
-        if (buffer == null) {
+        if (buffer != null) {
             return buffer;
         }
         path = string.Format("{0}/{1}", LuaConst.luaDir, fileName);
+        MonoBehaviour.print(path);
         buffer = this.loader.ReadBufferFromFile(path);
-        if (buffer == null) {
+        if (buffer != null) {
             return buffer;
         }
 #else
