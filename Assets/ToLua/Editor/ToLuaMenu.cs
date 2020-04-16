@@ -1110,7 +1110,7 @@ public static class ToLuaMenu
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Lua/Build bundle files not jit", false, 55)]
+    [MenuItem("Lua/Build bundle files", false, 55)]
     public static void BuildNotJitBundles()
     {
         ClearAllLuaFiles();
@@ -1156,63 +1156,6 @@ public static class ToLuaMenu
 
         BuildLuaBundle(null, "Assets/StreamingAssets/Lua");
         Directory.Delete(Application.streamingAssetsPath + "/Lua/", true);
-#endif
-        AssetDatabase.Refresh();
-    }
-
-    [MenuItem("Lua/Build Luajit bundle files   (PC)", false, 56)]
-    public static void BuildLuaBundles()
-    {
-        ClearAllLuaFiles();                
-        CreateStreamDir(GetOS());
-
-#if UNITY_4_6 || UNITY_4_7
-        string tempDir = CreateStreamDir("Lua");
-#else
-        string tempDir = Application.dataPath + "/temp/Lua";
-
-        if (!File.Exists(tempDir))
-        {
-            Directory.CreateDirectory(tempDir);
-        }
-#endif
-
-        string path = Application.dataPath.Replace('\\', '/');
-        path = path.Substring(0, path.LastIndexOf('/'));        
-        CopyBuildBat(path, tempDir);
-        CopyLuaBytesFiles(LuaConst.luaDir, tempDir, false);
-        Process proc = Process.Start(tempDir + "/Build.bat");
-        proc.WaitForExit();
-        CopyLuaBytesFiles(LuaConst.toluaDir, tempDir + "/Out");
-
-        AssetDatabase.Refresh();
-
-        string sourceDir = tempDir + "/Out";
-        List<string> dirs = new List<string>();        
-        GetAllDirs(sourceDir, dirs);
-
-#if UNITY_5 || UNITY_5_3_OR_NEWER
-		for (int i = 0; i < dirs.Count; i++)
-        {
-            string str = dirs[i].Remove(0, sourceDir.Length);
-            BuildLuaBundle(str.Replace('\\', '/'), "Assets/temp/Lua/Out");
-        }
-
-        BuildLuaBundle(null, "Assets/temp/Lua/Out");
-
-        AssetDatabase.Refresh();
-        string output = string.Format("{0}/{1}", Application.streamingAssetsPath, GetOS());
-        BuildPipeline.BuildAssetBundles(output, BuildAssetBundleOptions.DeterministicAssetBundle, EditorUserBuildSettings.activeBuildTarget);
-        Directory.Delete(Application.dataPath + "/temp/", true);
-#else
-        for (int i = 0; i < dirs.Count; i++)
-        {
-            string str = dirs[i].Remove(0, sourceDir.Length);
-            BuildLuaBundle(str.Replace('\\', '/'), "Assets/StreamingAssets/Lua/Out");
-        }
-
-        BuildLuaBundle(null, "Assets/StreamingAssets/Lua/Out/");
-        Directory.Delete(tempDir, true);
 #endif
         AssetDatabase.Refresh();
     }
