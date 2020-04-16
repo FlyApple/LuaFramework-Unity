@@ -6,7 +6,6 @@ using LuaFramework;
 public class StartUpCommand : ControllerCommand {
 
     public override void Execute(IMessage message) {
-        if (!Util.CheckEnvironment()) return;
 
         GameObject gameMgr = GameObject.Find("GlobalGenerator");
         if (gameMgr != null) {
